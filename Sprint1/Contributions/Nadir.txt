@@ -1,0 +1,6 @@
+Contribution for Sprint 1:
+
+I have contributed to the following:
+
+1. README Documentation: Created and refined the README (project description, objective, key features, and team roles).
+2. Backend Planning: Contributed to the conceptual backend design for authentication and profile management (data model ideas and expected user flow).
