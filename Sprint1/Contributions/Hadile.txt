@@ -1,0 +1,6 @@
+Contribution for Sprint 1:
+
+I have contributed to the following:
+
+1. User Stories: Wrote and organized the Sprint 1 user stories for User Account Management (registration, login, and profile management).
+2. Issue Management: Created and maintained the GitHub Issues for user stories (US.##) and ensured they were clear, actionable, and aligned with sprint requirements.
