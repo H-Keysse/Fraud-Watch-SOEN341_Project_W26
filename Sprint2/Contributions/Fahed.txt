@@ -2,4 +2,4 @@ Contribution for Sprint 2:
 
 I have contributed to the following:
 
-1. Meeting Minutes: Took and formatted the team meeting minutes for Sprint 1, ensuring discussions, decisions, and action items were documented and uploaded to the repository.
+1. Meeting Minutes: Took and formatted the team meeting minutes for Sprint 2, ensuring discussions, decisions, and action items were documented and uploaded to the repository.
