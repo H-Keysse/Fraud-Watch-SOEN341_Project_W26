@@ -1,6 +1,7 @@
-Contribution for Sprint 1:
+Contribution for Sprint 2:
 
 I have contributed to the following:
 
 1. Wrote the JavaScript logic for the Recipes and Home/Profile features (CRUD for recipes + search/filter, plus user preferences save/load). 
 2. Added clear inline comments across the relevant JS files (recipes.js, home.js, and supabase-init.js) to make the codebase easier for teammates to understand and maintain.
+3. Implemented the CI pipeline
