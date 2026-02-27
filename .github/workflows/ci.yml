@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  smoke-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node (for JS syntax checks)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: JavaScript syntax check (no code execution)
+        run: |
+          node --check supabase-init.js
+          node --check scripts/login.js
+          node --check scripts/home.js
+          node --check scripts/recipes.js
+
+      - name: Basic required files exist
+        run: |
+          test -f login.html
+          test -f register.html
+          test -f home.html
+          test -f recipes.html
