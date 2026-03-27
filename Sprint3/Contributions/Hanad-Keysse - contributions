@@ -6,3 +6,8 @@ I have contributed to the following:
     - Created user stories the necessary tasks associated to them
     - Assessed user story priority with my team members and reached a consensus on the allocation of story points
     - Created issues containing the tasks broken down from the user stories and assigned them to each member
+2. I created the acceptance tests:
+    - Created two detailed acceptance test for US.06 and US.07 from sprint 2
+3. I performed and closed acceptance test AT-03:
+    - I tested the main usage case of the recipe creation feature and its edge cases
+    - I closed the acceptance test after validating each test case with no bugs
