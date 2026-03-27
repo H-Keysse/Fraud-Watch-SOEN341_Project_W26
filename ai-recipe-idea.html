@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Recipe Idea</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/ai-recipe-idea.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+
+  <body>
+    <div id="message-banner"></div>
+
+    <div class="header">
+      <h1>AI Recipe Idea</h1>
+      <div class="header-actions">
+        <button id="home-btn" class="btn btn-secondary" type="button">
+          <i class="fa fa-home"></i> Home
+        </button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p class="intro">
+        List what you have in your fridge (one ingredient per line or comma-separated). We send
+        that list to OpenAI and show up to three recipe ideas you can make with those ingredients.
+      </p>
+
+      <form id="ai-form">
+        <div class="form-group">
+          <label for="ingredients-input">Ingredients in your fridge</label>
+          <textarea
+            id="ingredients-input"
+            name="ingredients"
+            rows="8"
+            required
+            placeholder="e.g. eggs, milk, spinach, cheddar, butter"
+          ></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            <i class="fa fa-magic"></i> Get recipe ideas
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel results-panel" id="results-section" hidden>
+      <h2>Suggested recipes (0–3)</h2>
+      <div id="results-container" class="results-grid"></div>
+    </div>
+
+    <script src="supabase-init.js"></script>
+    <script src="scripts/ai-recipe-idea.js"></script>
+  </body>
+</html>

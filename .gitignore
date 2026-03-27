@@ -1,0 +1,4 @@
+# Local secrets (never commit API keys)
+openai-config.local.js
+.env
+.env.*

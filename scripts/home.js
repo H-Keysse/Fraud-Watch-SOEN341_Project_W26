@@ -39,6 +39,14 @@ document.getElementById("recipes-btn").addEventListener("click", () => {
   window.location.href = "recipes.html";
 });
 
+document.getElementById("planner-btn").addEventListener("click", () => {
+  window.location.href = "meal-planner.html";
+});
+
+document.getElementById("ai-recipe-btn").addEventListener("click", () => {
+  window.location.href = "ai-recipe-idea.html";
+});
+
 async function checkSession() {
   const {
     data: { session },

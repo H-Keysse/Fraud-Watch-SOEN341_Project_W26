@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Meal Planner</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/meal-planner.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+
+  <body>
+    <div id="message-banner"></div>
+
+    <div class="header">
+      <h1>Weekly Meal Planner</h1>
+      <div class="header-actions">
+        <button id="recipes-btn" class="btn btn-secondary">
+          <i class="fa fa-cutlery"></i> Recipes
+        </button>
+        <button id="home-btn" class="btn btn-secondary">
+          <i class="fa fa-home"></i> Home
+        </button>
+      </div>
+    </div>
+
+    <div class="week-nav">
+      <button id="prev-week-btn" class="btn btn-secondary">
+        <i class="fa fa-chevron-left"></i> Previous Week
+      </button>
+      <h2 id="week-label"></h2>
+      <button id="next-week-btn" class="btn btn-secondary">
+        Next Week <i class="fa fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div class="planner-wrapper">
+      <table class="planner-grid">
+        <thead>
+          <tr>
+            <th>Meal Type</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
+        </thead>
+        <tbody id="planner-grid-body"></tbody>
+      </table>
+    </div>
+
+    <div id="assign-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Assign Meal</h2>
+          <span class="close" id="close-assign-modal">&times;</span>
+        </div>
+        <form id="assign-form">
+          <input type="hidden" id="assign-day" />
+          <input type="hidden" id="assign-meal-type" />
+          <div class="form-group">
+            <label>Slot</label>
+            <p id="assign-context" class="slot-context"></p>
+          </div>
+          <div class="form-group">
+            <label for="assign-recipe">Recipe</label>
+            <select id="assign-recipe" required></select>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="cancel-assign-btn" class="btn btn-secondary">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="supabase-init.js"></script>
+    <script src="scripts/meal-planner.js"></script>
+  </body>
+</html>
