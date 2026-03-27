@@ -5,3 +5,4 @@ I have contributed to the following:
 1. I have refactored the projcet by polishing the file structure: 
     - Isolated the css/js/html portions into their own respective files for better readability, scalability and ease of improvement if needed.
     - Worked with Nadir to make a function search system for our recipes. 
+ 

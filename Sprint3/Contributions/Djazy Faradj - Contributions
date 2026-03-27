@@ -1,0 +1,11 @@
+Contribution for Sprint 3:
+
+I have contributed to the following:
+
+1. I integrated OpenAI's API to our website for the AI recipe suggestion page: 
+    - Generated my own API key and designed a way to send Open AI a list of ingredients so that it returns its suggestions of recipes to do based on what was inputted by the user.
+
+2. I helped design (along with Nadir) the database of our website to handle the weekly meal planner: 
+    - We created a "meal plans" table to store the id's of the "meal plan items" associated with a given user
+    - We created a "meal plan items" table to store the details of the meal plans made by the users (day of the week, dinner/breakfast/..,recipe_id)
+    - We implemeted Row-Level Security to ensure that only the user's own meal plans can be edited/viewed/updated/deleted

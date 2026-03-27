@@ -1,0 +1,117 @@
+Meeting Minutes - Meeting #3
+
+Date: March 09, 2026
+Time: 2:00 pm
+Location: Online
+
+
+Attendees
+Hanad-Keysse, MOHAMED HASSAN - 40299566
+Hadile, Magramane - 40316211
+Hao, Qi - 40105579
+Fahed, Waheed - 40286415
+Djazy, Faradj - 40315411
+
+
+Agenda Items
+Weekly meal planner implementation
+Unique feature discussion
+User stories and sprint planning
+
+00:03 (Hadile)
+Opened the meeting and introduced the objectives for Sprint #3, including implementing the weekly meal planner and deciding on a unique feature.
+
+00:29 (Djazy)
+Suggested implementing an AI-based recipe recommender feature.
+
+00:45 (Fahed)
+Proposed having a calorie counter that calculates calories and macros based on selected ingredients.
+
+01:05 (Keysse)
+Clarified that the recommended feature for the AI recipe generator based on available ingredients.
+
+01:25 (ALL MEMBERS)
+Agreed that the AI recipe recommender is a good feature to implement.
+
+01:35 (Keysse)
+Introduced the user stories for the sprint and confirmed that the team will implement both the weekly meal planner and the AI feature.
+
+01:54 (Keysse)
+Outlined user stories:
+Users can plan meals for the entire week
+Users can input available ingredients and receive AI-generated recipes
+
+02:40 (Fahed)
+Suggested limiting the number of generated recipes to avoid overwhelming users.
+
+02:55 (Djazy)
+Agreed and proposed limiting results to a maximum of three recipes.
+
+03:02 (Fahed)
+Raised concern about cases with insufficient ingredients to generate recipes.
+
+03:13 (Keysse)
+Acknowledged the concern and discussed possible flexibility in recipe generation.
+
+03:27 (Djazy)
+Suggested allowing between 0 to 3 recipes depending on available ingredients.
+
+03:41 (Keysse)
+Proposed a refined solution:
+Show one recipe at a time
+Allow users to request additional suggestions (up to three total)
+
+04:12 (Fahed)
+Suggested wording it as “up to three recipes,” which was accepted.
+
+04:25 (Hadile)
+Asked whether users can revisit previous recipe suggestions.
+
+04:32 (Keysse)
+Confirmed that previous recipes would remain visible.
+
+04:51 (Fahed)
+Asked how the system should behave if no matching recipes are found.
+
+04:52 (Hao)
+Explained that the weekly meal planner helps mitigate this issue by planning ahead.
+
+05:10 (Keysse)
+Asked how the weekly meal planner would function in practice.
+
+05:21 (Hao)
+Explained that users plan meals in advance and shop accordingly for ingredients.
+
+05:56 (Fahed)
+Asked whether the planner includes all meals (breakfast, lunch, dinner).
+
+06:12 (Hao)
+Explained that meals can be categorized flexibly and reused across days.
+
+07:01 (Keysse)
+Asked about backend implementation responsibilities.
+
+07:02 (Djazy)
+Explained:
+Will work on OpenAI integration and API setup
+Will coordinate with frontend development
+Will handle database-related backend tasks
+
+08:01 (Fahed)
+Explained collaboration approach:
+Team members will coordinate closely
+Multiple design ideas will be tested before finalizing
+
+08:44 (Keysse)
+Proposed that each member restate their roles.
+
+08:58 (Hao)
+Outlined sprint requirements:
+Two acceptance tests for current user stories
+Two acceptance tests for previous sprint
+
+09:30 (Hadile)
+Summarized what has been decided for this sprint
+
+10:00
+End of Meeting #3
