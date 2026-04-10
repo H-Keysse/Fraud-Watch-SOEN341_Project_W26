@@ -309,7 +309,14 @@ assignForm.addEventListener("submit", async (event) => {
     await refreshWeekData();
     showMessage("Meal slot saved.");
   } catch (error) {
-    showMessage(`Failed to save meal slot: ${error.message}`, true);
+    if (error.code === "23505") {
+      showMessage(
+        "This recipe is already assigned on this day. Please choose a different recipe or meal slot.",
+        true,
+      );
+    } else {
+      showMessage(`Failed to save meal slot: ${error.message}`, true);
+    }
   }
 });
 
