@@ -83,8 +83,10 @@ async function loadRecipes() {
     .order("created_at", { ascending: false });
 
   if (searchQuery) {
+    // Bug fix: escape special LIKE characters to prevent broken queries
+    const sanitized = searchQuery.replace(/[%_\\]/g, "\\$&");
     query = query.or(
-      `name.ilike.%${searchQuery}%,ingredients.ilike.%${searchQuery}%,steps.ilike.%${searchQuery}%`,
+      `name.ilike.%${sanitized}%,ingredients.ilike.%${sanitized}%,steps.ilike.%${sanitized}%`,
     );
   }
 
@@ -163,7 +165,7 @@ function renderRecipes(recipes) {
                             <i class="fa fa-clock-o"></i> ${recipe.time ? recipe.time + " mins" : "N/A"}
                         </div>
                         <div class="recipe-cost">
-                            $${parseFloat(recipe.cost).toFixed(2)}
+                            $${recipe.cost != null ? parseFloat(recipe.cost).toFixed(2) : "0.00"}
                         </div>
                     </div>
                     ${actionsHtml}
@@ -286,7 +288,7 @@ recipeForm.addEventListener("submit", async (e) => {
     ingredients: ingredientsInput.value.trim(),
     steps: stepsInput.value.trim(),
     cost: parseFloat(costInput.value),
-    time: parseInt(timeInput.value, 10),
+    time: timeInput.value ? parseInt(timeInput.value, 10) : null,
     allergens: selectedAllergens,
     dietary_tags: selectedDietary,
   };
