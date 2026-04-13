@@ -1,4 +1,4 @@
-function escapeHtml(unsafe) {
+function htmlCases(unsafe) {
   return (unsafe || "")
     .toString()
     .replace(/&/g, "&amp;")
@@ -8,4 +8,4 @@ function escapeHtml(unsafe) {
     .replace(/'/g, "&#039;");
 }
 
-module.exports = { escapeHtml };
+module.exports = { htmlCases };
