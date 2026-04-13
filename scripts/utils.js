@@ -12,16 +12,4 @@ function validateLoginInputs(email, password) {
   return Boolean(email && password);
 }
 
-function Profilecheck(userId, selectedDiet, selectedAllergies) {
-  return {
-    id: userId,
-    dietary_preferences: selectedDiet,
-    allergies: selectedAllergies,
-  };
-}
-
-module.exports = {
-  htmlCases,
-  validateLoginInputs,
-  Profilecheck
-};
+module.exports = { htmlCases, validateLoginInputs };
