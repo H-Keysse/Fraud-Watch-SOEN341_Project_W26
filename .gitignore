@@ -2,3 +2,4 @@
 openai-config.local.js
 .env
 .env.*
+node_modules/
