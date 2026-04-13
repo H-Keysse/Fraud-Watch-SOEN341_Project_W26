@@ -21,12 +21,12 @@ Help users **simplify meal planning** and build a **efficient and healthier rout
 ### Team Members and Roles
 | Team Member | Student ID | Role(s) |
 |---|---:|---|
-| Nadir Taleb | 40276506 | Backend Developer; Documentation |
-| Hao Qi | 40105579 | Frontend Developer |
-| Hanad-Keysse Mohamed Hassan | 40299566 | Repository; Frontend Developer |
-| Djazy Faradj | 40315411 | Backend Developer |
-| Fahed Waheed | 40286415 | Sprint Planning & DevOps |
-| Hadile Magramane | 40316211 | DevOps |
+| Nadir Taleb (nadirtaleb2) | 40276506 | Backend Developer; Documentation |
+| Hao Qi (hisanip) | 40105579 | Frontend Developer |
+| Hanad-Keysse Mohamed Hassan (H-Keysse) | 40299566 | Repository; Frontend Developer |
+| Djazy Faradj (Djazy-Faradj) | 40315411 | Backend Developer |
+| Fahed Waheed (FahedWaheed8) | 40286415 | Sprint Planning & DevOps |
+| Hadile Magramane (Hadile12) | 40316211 | DevOps |
 
 ### Development Approach
 We follow an **Agile/Scrum** workflow using GitHub for version control, issue tracking, and sprint deliverables.
