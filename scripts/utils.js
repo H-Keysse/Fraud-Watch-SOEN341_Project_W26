@@ -21,7 +21,7 @@ function Profilecheck(userId, selectedDiet, selectedAllergies) {
 }
 
 module.exports = {
-  escapeHtml,
+  htmlCases,
   validateLoginInputs,
   Profilecheck
 };
