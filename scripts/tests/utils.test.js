@@ -1,4 +1,4 @@
-const { htmlCases, validateLoginInputs } = require("../utils");
+const { htmlCases, validateLoginInputs, Profilecheck } = require("../utils");
 
 test("htmlCases escapes dangerous HTML characters", () => {
   expect(htmlCases('<script>alert("x")</script>')).toBe(
@@ -22,4 +22,24 @@ test("validateLoginInputs returns false when password is missing", () => {
 
 test("validateLoginInputs returns true when both email and password are provided", () => {
   expect(validateLoginInputs("user@email.com", "password123")).toBe(true);
+});
+
+test("Profilecheck returns correct profile object with selected preferences", () => {
+  expect(
+    Profilecheck("user123", ["Vegan"], ["Nuts", "Dairy"])
+  ).toEqual({
+    id: "user123",
+    dietary_preferences: ["Vegan"],
+    allergies: ["Nuts", "Dairy"],
+  });
+});
+
+test("Profilecheck returns correct profile object with empty arrays", () => {
+  expect(
+    Profilecheck("user456", [], [])
+  ).toEqual({
+    id: "user456",
+    dietary_preferences: [],
+    allergies: [],
+  });
 });
