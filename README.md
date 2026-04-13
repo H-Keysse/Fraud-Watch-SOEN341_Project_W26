@@ -28,8 +28,5 @@ Help users **simplify meal planning** and build a **efficient and healthier rout
 | Fahed Waheed | 40286415 | Sprint Planning & DevOps |
 | Hadile Magramane | 40316211 | DevOps |
 
-### Sprint Planning
-You can view our sprint plan [here](https://docs.google.com/spreadsheets/d/1A2-Qmtp2N7h1HpOGcNgvHU-gsrNxWlXVfaY8XSiNMSE/edit?usp=sharing).
-
 ### Development Approach
 We follow an **Agile/Scrum** workflow using GitHub for version control, issue tracking, and sprint deliverables.
