@@ -276,47 +276,18 @@ assignForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  const dayOfWeek = Number(assignDayInput.value);
-  const mealType = assignMealTypeInput.value;
-
-  // Bug fix: prevent assigning the same recipe to the same day twice
-  const duplicateEntry = Object.entries(weeklySlots).find(([key, slot]) => {
-    const [slotDay] = key.split("-");
-    return (
-      Number(slotDay) === dayOfWeek &&
-      String(slot.recipe_id) === String(recipeId) &&
-      key !== slotKey(dayOfWeek, mealType)
-    );
-  });
-
-  if (duplicateEntry) {
-    const existingMealType = duplicateEntry[0].split("-").slice(1).join("-");
-    showMessage(
-      `This recipe is already assigned to ${existingMealType} on ${dayLabels[dayOfWeek - 1]}. Please choose a different recipe.`,
-      true,
-    );
-    return;
-  }
-
   try {
     await upsertMealSlot({
       weekStartDate: formatDateISO(currentWeekStart),
-      dayOfWeek,
-      mealType,
+      dayOfWeek: Number(assignDayInput.value),
+      mealType: assignMealTypeInput.value,
       recipeId,
     });
     closeAssignModal();
     await refreshWeekData();
     showMessage("Meal slot saved.");
   } catch (error) {
-    if (error.code === "23505") {
-      showMessage(
-        "This recipe is already assigned on this day. Please choose a different recipe or meal slot.",
-        true,
-      );
-    } else {
-      showMessage(`Failed to save meal slot: ${error.message}`, true);
-    }
+    showMessage(`Failed to save meal slot: ${error.message}`, true);
   }
 });
 
