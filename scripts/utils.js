@@ -1,5 +1,5 @@
-function htmlCases(unsafe) {
-  return (unsafe || "")
+function htmlCases(input) {
+  return (input || "")
     .toString()
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -8,4 +8,8 @@ function htmlCases(unsafe) {
     .replace(/'/g, "&#039;");
 }
 
-module.exports = { htmlCases };
+function validateLoginInputs(email, password) {
+  return Boolean(email && password);
+}
+
+module.exports = { htmlCases, validateLoginInputs };
