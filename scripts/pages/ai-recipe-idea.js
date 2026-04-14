@@ -1,3 +1,7 @@
+import { escapeHtml } from "../logic/sharedLogic.js";
+
+const supabase = window.supabase;
+
 
 
 const OPENAI_API_KEY =
@@ -20,15 +24,7 @@ function showMessage(text, isError = false) {
   }, 5000);
 }
 
-function escapeHtml(unsafe) {
-  return (unsafe || "")
-    .toString()
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+
 
 function buildUserPrompt(ingredientsRaw) {
   const lines = ingredientsRaw
