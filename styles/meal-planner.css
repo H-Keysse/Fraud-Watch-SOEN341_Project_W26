@@ -11,7 +11,7 @@ body {
   font-family: "Roboto", sans-serif;
   background:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg");
+    url("../images/food-background.svg");
   background-position: center;
   background-size: cover;
   min-height: 100vh;
