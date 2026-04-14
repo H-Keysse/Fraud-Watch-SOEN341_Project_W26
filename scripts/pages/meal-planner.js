@@ -2,8 +2,8 @@ import * as authService from "../services/authService.js";
 import * as mealPlannerService from "../services/mealPlannerService.js";
 import { escapeHtml } from "../logic/sharedLogic.js";
 import {
-  DAY_LABELS,
-  MEAL_TYPES,
+  dayLabels,
+  mealTypes,
   buildPlannerRowHtml,
   buildWeeklySlotMap,
   formatDateISO,
@@ -59,7 +59,7 @@ async function loadRecipesIntoSelect() {
 function renderGrid() {
   plannerGridBody.innerHTML = "";
 
-  MEAL_TYPES.forEach((mealType) => {
+  mealTypes.forEach((mealType) => {
     const row = document.createElement("tr");
     row.innerHTML = buildPlannerRowHtml(mealType, weeklySlots, escapeHtml);
     plannerGridBody.appendChild(row);
@@ -86,7 +86,7 @@ function openAssignModal(dayOfWeek, mealType) {
   const existing = weeklySlots[slotKey(dayOfWeek, mealType)];
   assignRecipeSelect.value = existing ? existing.recipe_id : "";
 
-  assignContext.textContent = `${DAY_LABELS[dayOfWeek - 1]} - ${mealType}`;
+  assignContext.textContent = `${dayLabels[dayOfWeek - 1]} - ${mealType}`;
   assignModal.classList.add("active");
 }
 

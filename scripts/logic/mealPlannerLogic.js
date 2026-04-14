@@ -1,7 +1,7 @@
 
 
-export const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-export const MEAL_TYPES = ["breakfast", "lunch", "dinner", "snack"];
+export const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export const mealTypes = ["breakfast", "lunch", "dinner", "snack"];
 
 export function getMonday(date) {
   const d = new Date(date);
@@ -42,7 +42,7 @@ export function isRecipeAssignedToAnotherSlotOnSameDay({
   recipeId,
 }) {
   const id = String(recipeId);
-  for (const mealType of MEAL_TYPES) {
+  for (const mealType of mealTypes) {
     if (mealType === mealTypeForSlot) continue;
     const slot = weeklySlots[slotKey(dayOfWeek, mealType)];
     if (
