@@ -1,3 +1,11 @@
+import {
+  escapeHtml,
+  buildRecipeOrFilter,
+  normalizeMaxCostFilter,
+} from "../logic/sharedLogic.js";
+
+const supabase = window.supabase;
+
 
 
 
@@ -48,21 +56,19 @@ function showMessage(text, isError = false) {
 }
 
 async function loadRecipes() {
-  const searchQuery = searchInput.value.trim();
-  const maxCost = parseFloat(filterCostNumber.value);
+  const orFilter = buildRecipeOrFilter(searchInput.value);
+  const maxCost = normalizeMaxCostFilter(filterCostNumber.value);
 
   let query = supabase
     .from("recipes")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (searchQuery) {
-    query = query.or(
-      `name.ilike.%${searchQuery}%,ingredients.ilike.%${searchQuery}%,steps.ilike.%${searchQuery}%`,
-    );
+  if (orFilter) {
+    query = query.or(orFilter);
   }
 
-  if (!isNaN(maxCost) && maxCost > 0) {
+  if (maxCost != null) {
     query = query.lte("cost", maxCost);
   }
 
@@ -155,15 +161,7 @@ function renderRecipes(recipes) {
   });
 }
 
-function escapeHtml(unsafe) {
-  return (unsafe || "")
-    .toString()
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+
 
 document.getElementById("add-recipe-btn").addEventListener("click", () => {
   recipeForm.reset();
