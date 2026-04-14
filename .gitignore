@@ -1,4 +1,5 @@
-# Local secrets (never commit API keys)
-openai-config.local.js
+# Local env files
+Meeting Minutes/
+README.md
 .env
 .env.*
