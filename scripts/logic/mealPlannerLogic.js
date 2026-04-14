@@ -1,8 +1,9 @@
 
-
+//Labels for days & meal types
 export const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 export const mealTypes = ["breakfast", "lunch", "dinner", "snack"];
 
+//Returns the Monday of the week given a date
 export function getMonday(date) {
   const d = new Date(date);
   const day = d.getDay();
@@ -12,20 +13,23 @@ export function getMonday(date) {
   return d;
 }
 
+//Date formatting (YYYY-MM-DD format)
 export function formatDateISO(date) {
   return date.toISOString().split("T")[0];
 }
 
+//Formats week range
 export function formatWeekRange(mondayDate) {
   const endDate = new Date(mondayDate);
   endDate.setDate(endDate.getDate() + 6);
   return `${mondayDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
 }
 
+//Unique key for slot in the meal planner
 export function slotKey(dayOfWeek, mealType) {
   return `${dayOfWeek}-${mealType}`;
 }
-
+//lookup map for the slots
 export function buildWeeklySlotMap(items) {
   const weeklySlots = {};
   (items || []).forEach((item) => {
@@ -34,7 +38,7 @@ export function buildWeeklySlotMap(items) {
   return weeklySlots;
 }
 
-
+// Checks for duplicate recipe in the same week
 export function isRecipeAssignedToAnotherSlotOnSameDay({
   weeklySlots,
   dayOfWeek,
@@ -56,6 +60,7 @@ export function isRecipeAssignedToAnotherSlotOnSameDay({
   return false;
 }
 
+//Generates HTML for each row in the meal planner
 export function buildPlannerRowHtml(mealType, weeklySlots, escapeHtmlFn) {
   let cells = `<th class="meal-type-cell">${mealType}</th>`;
 
