@@ -1,3 +1,9 @@
+/*
+  These tests verify the core recipe logic used for filtering and rendering recipes.
+  They check that recipe search and cost filtering behave correctly, and that
+  recipe cards show the proper actions when the recipe belongs to the current user.
+*/
+
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
@@ -8,7 +14,7 @@ import {
 
 
 
-test("buildRecipeOrFilter builds PostgRES or expression", () => {
+test("buildRecipeOrFilter builds PostgREST or expression", () => {
   const f = buildRecipeOrFilter("pasta");
   assert.ok(f.includes("name.ilike.%pasta%"));
   assert.ok(f.includes("ingredients.ilike.%pasta%"));
