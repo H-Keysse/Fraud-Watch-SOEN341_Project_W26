@@ -1,14 +1,12 @@
 import * as authService from "../services/authService.js";
-import { getSupabase } from "../supabaseClient.js";
-
+import * as recipeService from "../services/recipeService.js";
 import {
-  escapeHtml,
+  buildRecipeCardHtml,
+  buildRecipeFormPayload,
   buildRecipeOrFilter,
+  emptyRecipesMessageHtml,
   normalizeMaxCostFilter,
-} from "../logic/sharedLogic.js";
-
-
-
+} from "../logic/recipeLogic.js";
 
 let currentUser = null;
 let recipeToDelete = null;
@@ -32,20 +30,6 @@ const stepsInput = document.getElementById("recipe-steps");
 const costInput = document.getElementById("recipe-cost");
 const timeInput = document.getElementById("recipe-time");
 
-async function init() {
-  const {
-    data: { session },
-  } = await getSupabase().auth.getSession();
-
-  if (!session) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  currentUser = session.user;
-  await loadRecipes();
-}
-
 function showMessage(text, isError = false) {
   messageBanner.textContent = text;
   messageBanner.className = isError ? "error-msg" : "success-msg";
@@ -56,24 +40,29 @@ function showMessage(text, isError = false) {
   }, 3000);
 }
 
+async function init() {
+  const {
+    data: { session },
+  } = await authService.getSession();
+
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = session.user;
+  await loadRecipes();
+}
+
 async function loadRecipes() {
   const orFilter = buildRecipeOrFilter(searchInput.value);
   const maxCost = normalizeMaxCostFilter(filterCostNumber.value);
 
-  let query = getSupabase()
-    .from("recipes")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (orFilter) {
-    query = query.or(orFilter);
-  }
-
-  if (maxCost != null) {
-    query = query.lte("cost", maxCost);
-  }
-
-  const { data, error } = await query;
+  const { data, error } = await recipeService.fetchRecipesList({
+    creatorId: currentUser.id,
+    orFilter,
+    maxCost,
+  });
 
   if (error) {
     console.error("Error loading recipes:", error);
@@ -88,68 +77,14 @@ function renderRecipes(recipes) {
   recipesContainer.innerHTML = "";
 
   if (recipes.length === 0) {
-    recipesContainer.innerHTML =
-      '<p style="color: white; grid-column: 1/-1; text-align: center; font-size: 18px; padding: 20px; background: rgba(0,0,0,0.5); border-radius: 10px;">No recipes match your criteria.</p>';
+    recipesContainer.innerHTML = emptyRecipesMessageHtml;
     return;
   }
 
   recipes.forEach((recipe) => {
-    const isCreator = currentUser && recipe.creator === currentUser.id;
-
     const card = document.createElement("div");
     card.className = "recipe-card";
-
-    let actionsHtml = "";
-    if (isCreator) {
-      actionsHtml = `
-                        <div class="card-actions">
-                            <button class="btn btn-secondary edit-btn" data-id="${recipe.id}">Edit</button>
-                            <button class="btn btn-danger delete-btn" data-id="${recipe.id}">Delete</button>
-                        </div>
-                    `;
-    }
-
-    let allergensHtml = "";
-    if (recipe.allergens && recipe.allergens.length > 0) {
-      allergensHtml = `
-                        <div style="margin-top: 10px;">
-                            ${recipe.allergens.map((a) => `<span class="badge badge-allergen">${escapeHtml(a)}</span>`).join("")}
-                        </div>
-                    `;
-    }
-
-    let dietHtml = "";
-    if (recipe.dietary_tags && recipe.dietary_tags.length > 0) {
-      dietHtml = `
-                        <div style="margin-top: 5px;">
-                            ${recipe.dietary_tags.map((t) => `<span class="badge badge-diet">${escapeHtml(t)}</span>`).join("")}
-                        </div>
-                    `;
-    }
-
-    card.innerHTML = `
-                    <h3>${escapeHtml(recipe.name)}</h3>
-                    <div class="recipe-section">
-                        <strong>Ingredients:</strong>
-                        <p>${escapeHtml(recipe.ingredients)}</p>
-                    </div>
-                    <div class="recipe-section">
-                        <strong>Steps:</strong>
-                        <p>${escapeHtml(recipe.steps)}</p>
-                    </div>
-                    ${allergensHtml}
-                    ${dietHtml}
-                    <div class="recipe-meta">
-                        <div class="recipe-time">
-                            <i class="fa fa-clock-o"></i> ${recipe.time ? recipe.time + " mins" : "N/A"}
-                        </div>
-                        <div class="recipe-cost">
-                            $${parseFloat(recipe.cost).toFixed(2)}
-                        </div>
-                    </div>
-                    ${actionsHtml}
-                `;
-
+    card.innerHTML = buildRecipeCardHtml(recipe, currentUser?.id);
     recipesContainer.appendChild(card);
   });
 
@@ -161,8 +96,6 @@ function renderRecipes(recipes) {
     btn.addEventListener("click", (e) => openDeleteModal(e.target.dataset.id));
   });
 }
-
-
 
 document.getElementById("add-recipe-btn").addEventListener("click", () => {
   recipeForm.reset();
@@ -212,11 +145,10 @@ clearFiltersBtn.addEventListener("click", () => {
 });
 
 async function openEditModal(id) {
-  const { data, error } = await getSupabase()
-    .from("recipes")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const { data, error } = await recipeService.fetchRecipeById(
+    id,
+    currentUser.id,
+  );
 
   if (error) {
     showMessage("Error fetching recipe details.", true);
@@ -254,24 +186,24 @@ recipeForm.addEventListener("submit", async (e) => {
     document.querySelectorAll('input[name="dietary"]:checked'),
   ).map((cb) => cb.value);
 
-  const recipeData = {
-    name: nameInput.value.trim(),
-    ingredients: ingredientsInput.value.trim(),
-    steps: stepsInput.value.trim(),
-    cost: parseFloat(costInput.value),
-    time: parseInt(timeInput.value, 10),
+  const recipeData = buildRecipeFormPayload({
+    name: nameInput.value,
+    ingredients: ingredientsInput.value,
+    steps: stepsInput.value,
+    cost: costInput.value,
+    time: timeInput.value,
     allergens: selectedAllergens,
-    dietary_tags: selectedDietary,
-  };
+    dietaryTags: selectedDietary,
+  });
 
   const recipeId = recipeIdInput.value;
 
   if (recipeId) {
-    const { error } = await getSupabase()
-      .from("recipes")
-      .update(recipeData)
-      .eq("id", recipeId)
-      .eq("creator", currentUser.id);
+    const { error } = await recipeService.updateRecipe(
+      recipeId,
+      recipeData,
+      currentUser.id,
+    );
 
     if (error) {
       showMessage("Failed to update recipe: " + error.message, true);
@@ -282,7 +214,7 @@ recipeForm.addEventListener("submit", async (e) => {
     }
   } else {
     recipeData.creator = currentUser.id;
-    const { error } = await getSupabase().from("recipes").insert([recipeData]);
+    const { error } = await recipeService.insertRecipe(recipeData);
 
     if (error) {
       showMessage("Failed to create recipe: " + error.message, true);
@@ -309,11 +241,10 @@ document
   .addEventListener("click", async () => {
     if (!recipeToDelete) return;
 
-    const { error } = await getSupabase()
-      .from("recipes")
-      .delete()
-      .eq("id", recipeToDelete)
-      .eq("creator", currentUser.id);
+    const { error } = await recipeService.deleteRecipe(
+      recipeToDelete,
+      currentUser.id,
+    );
 
     deleteModal.classList.remove("active");
 

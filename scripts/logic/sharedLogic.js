@@ -30,20 +30,3 @@ export function formatWeekRange(mondayDate) {
 export function slotKey(dayOfWeek, mealType) {
   return `${dayOfWeek}-${mealType}`;
 }
-
-export function sanitizeIlikeSearchTerm(raw) {
-  return (raw || "").trim().replace(/%/g, "").replace(/_/g, "");
-}
-
-export function normalizeMaxCostFilter(value) {
-  const n = typeof value === "string" ? parseFloat(value) : Number(value);
-  if (Number.isNaN(n) || n <= 0) return null;
-  return n;
-}
-
-export function buildRecipeOrFilter(searchTerm) {
-  const q = sanitizeIlikeSearchTerm(searchTerm);
-  if (!q) return null;
-  const pattern = `%${q}%`;
-  return `name.ilike.${pattern},ingredients.ilike.${pattern},steps.ilike.${pattern}`;
-}
