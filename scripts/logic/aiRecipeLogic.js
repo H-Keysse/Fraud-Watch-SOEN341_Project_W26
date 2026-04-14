@@ -39,13 +39,17 @@ export function parseJsonFromAssistantContent(content) {
   return parsed.recipes.slice(0, 3);
 }
 
+
+//Generates HTML for display (1 recipe suggestion)
 export function buildAiSuggestionCardHtml(recipe, escapeHtmlFn) {
   const title = escapeHtmlFn(recipe.title || "Untitled");
   const ingredients = Array.isArray(recipe.ingredients_used)
     ? recipe.ingredients_used.map((i) => `<li>${escapeHtmlFn(i)}</li>`).join("")
     : "";
+  //Prevent HTML injections
   const steps = escapeHtmlFn(recipe.steps || "");
 
+  //Returns html card for user to see
   return `
       <h3>${title}</h3>
       <div class="recipe-suggestion-section">
