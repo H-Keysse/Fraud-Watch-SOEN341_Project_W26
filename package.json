@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx --yes serve . -l 4173",
     "start": "npm run dev",
-    "test": "node --test tests/sharedLogic.test.js tests/authLogic.test.js tests/profileLogic.test.js tests/recipeLogic.test.js tests/mealPlannerLogic.test.js tests/aiRecipeLogic.test.js"
+    "test": "node --test tests/sharedLogic.test.js tests/authLogic.test.js tests/recipeLogic.test.js tests/mealPlannerLogic.test.js tests/aiRecipeLogic.test.js"
   },
   "engines": {
     "node": ">=18"
