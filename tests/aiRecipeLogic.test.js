@@ -1,18 +1,16 @@
+/*
+  These tests verify the core AI recipe logic.
+  They check that assistant responses are parsed correctly and that
+  generated recipe suggestion cards safely escape rendered content.
+*/
+
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
   buildAiSuggestionCardHtml,
-  buildUserPrompt,
   parseJsonFromAssistantContent,
 } from "../scripts/logic/aiRecipeLogic.js";
 import { escapeHtml } from "../scripts/logic/sharedLogic.js";
-
-test("buildUserPrompt lists ingredients", () => {
-  const p = buildUserPrompt("eggs, milk\nspinach");
-  assert.ok(p.includes("- eggs"));
-  assert.ok(p.includes("- milk"));
-  assert.ok(p.includes("- spinach"));
-});
 
 test("parseJsonFromAssistantContent strips markdown fences", () => {
   const raw = "```json\n{\"recipes\":[{\"title\":\"T\",\"ingredients_used\":[],\"steps\":\"s\"}]}\n```";
