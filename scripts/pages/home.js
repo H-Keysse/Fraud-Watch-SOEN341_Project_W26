@@ -1,4 +1,6 @@
 import * as authService from "../services/authService.js";
+import * as userService from "../services/userService.js";
+import { buildProfileUpsertPayload } from "../logic/profileLogic.js";
 
 let currentUser = null;
 const messageBanner = document.getElementById("message-banner");
@@ -33,7 +35,6 @@ async function checkSession() {
   if (!session) {
     window.location.href = "login.html";
   } else {
-    console.log("User:", session.user);
     currentUser = session.user;
     const email = session.user.email;
     document.getElementById("welcome-msg").textContent =
@@ -46,12 +47,7 @@ async function checkSession() {
 async function loadUserPreferences() {
   if (!currentUser) return;
 
-  const { getSupabase } = await import("../supabaseClient.js");
-  const { data } = await getSupabase()
-    .from("users")
-    .select("dietary_preferences, allergies")
-    .eq("id", currentUser.id)
-    .single();
+  const { data } = await userService.fetchUserPreferences(currentUser.id);
 
   if (data) {
     const dietPrefs = data.dietary_preferences || [];
@@ -82,12 +78,13 @@ document
       document.querySelectorAll('input[name="profile_allergies"]:checked'),
     ).map((cb) => cb.value);
 
-    const { getSupabase } = await import("../supabaseClient.js");
-    const { error } = await getSupabase().from("users").upsert({
-      id: currentUser.id,
-      dietary_preferences: selectedDiet,
-      allergies: selectedAllergies,
-    });
+    const payload = buildProfileUpsertPayload(
+      currentUser.id,
+      selectedDiet,
+      selectedAllergies,
+    );
+
+    const { error } = await userService.upsertUserProfileRow(payload);
 
     if (error) {
       showMessage("Error saving preferences: " + error.message, true);
