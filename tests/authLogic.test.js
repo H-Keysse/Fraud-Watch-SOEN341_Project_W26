@@ -1,3 +1,9 @@
+/*
+  This test verifies the core authentication validation logic.
+  It ensures that the registration input follows the expected rules,
+  especially the minimum password length requirement.
+*/
+
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
