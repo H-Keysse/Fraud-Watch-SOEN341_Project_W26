@@ -1,4 +1,4 @@
-const supabase = window.supabase;
+import { getSupabase } from "../supabaseClient.js";
 
 
 
@@ -30,7 +30,7 @@ document.getElementById("ai-recipe-btn").addEventListener("click", () => {
 async function checkSession() {
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await getSupabase().auth.getSession();
 
   if (!session) {
     window.location.href = "login.html";
@@ -48,7 +48,7 @@ async function checkSession() {
 async function loadUserPreferences() {
   if (!currentUser) return;
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("users")
     .select("dietary_preferences, allergies")
     .eq("id", currentUser.id)
@@ -83,7 +83,7 @@ document
       document.querySelectorAll('input[name="profile_allergies"]:checked'),
     ).map((cb) => cb.value);
 
-    const { error } = await supabase.from("users").upsert({
+    const { error } = await getSupabase().from("users").upsert({
       id: currentUser.id,
       dietary_preferences: selectedDiet,
       allergies: selectedAllergies,
@@ -97,7 +97,7 @@ document
   });
 
 document.getElementById("logout-btn").addEventListener("click", async () => {
-  const { error } = await supabase.auth.signOut();
+  const { error } = await getSupabase().auth.signOut();
   if (!error) {
     window.location.href = "login.html";
   } else {

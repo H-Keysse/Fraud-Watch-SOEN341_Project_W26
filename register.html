@@ -277,7 +277,7 @@
             btn.disabled = true;
 
             try {
-                const { data, error } = await supabase.auth.signUp({
+                const { data, error } = await window.__MEAL_MAJOR_SUPABASE__.auth.signUp({
                     email: email,
                     password: password,
                     options: {

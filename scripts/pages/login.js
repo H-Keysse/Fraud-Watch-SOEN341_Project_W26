@@ -1,4 +1,4 @@
-const supabase = window.supabase;
+import { getSupabase } from "../supabaseClient.js";
 
 
 
@@ -21,7 +21,7 @@ document.querySelector('.button.login button').addEventListener('click', async (
     btn.disabled = true;
 
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await getSupabase().auth.signInWithPassword({
             email: email,
             password: password,
         });

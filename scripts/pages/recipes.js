@@ -1,10 +1,10 @@
+import { getSupabase } from "../supabaseClient.js";
+
 import {
   escapeHtml,
   buildRecipeOrFilter,
   normalizeMaxCostFilter,
 } from "../logic/sharedLogic.js";
-
-const supabase = window.supabase;
 
 
 
@@ -34,7 +34,7 @@ const timeInput = document.getElementById("recipe-time");
 async function init() {
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await getSupabase().auth.getSession();
 
   if (!session) {
     window.location.href = "login.html";
@@ -59,7 +59,7 @@ async function loadRecipes() {
   const orFilter = buildRecipeOrFilter(searchInput.value);
   const maxCost = normalizeMaxCostFilter(filterCostNumber.value);
 
-  let query = supabase
+  let query = getSupabase()
     .from("recipes")
     .select("*")
     .order("created_at", { ascending: false });
@@ -211,7 +211,7 @@ clearFiltersBtn.addEventListener("click", () => {
 });
 
 async function openEditModal(id) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("recipes")
     .select("*")
     .eq("id", id)
@@ -266,7 +266,7 @@ recipeForm.addEventListener("submit", async (e) => {
   const recipeId = recipeIdInput.value;
 
   if (recipeId) {
-    const { error } = await supabase
+    const { error } = await getSupabase()
       .from("recipes")
       .update(recipeData)
       .eq("id", recipeId)
@@ -281,7 +281,7 @@ recipeForm.addEventListener("submit", async (e) => {
     }
   } else {
     recipeData.creator = currentUser.id;
-    const { error } = await supabase.from("recipes").insert([recipeData]);
+    const { error } = await getSupabase().from("recipes").insert([recipeData]);
 
     if (error) {
       showMessage("Failed to create recipe: " + error.message, true);
@@ -308,7 +308,7 @@ document
   .addEventListener("click", async () => {
     if (!recipeToDelete) return;
 
-    const { error } = await supabase
+    const { error } = await getSupabase()
       .from("recipes")
       .delete()
       .eq("id", recipeToDelete)

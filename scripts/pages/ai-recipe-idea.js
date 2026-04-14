@@ -1,6 +1,6 @@
-import { escapeHtml } from "../logic/sharedLogic.js";
+import { getSupabase } from "../supabaseClient.js";
 
-const supabase = window.supabase;
+import { escapeHtml } from "../logic/sharedLogic.js";
 
 
 
@@ -172,7 +172,7 @@ aiForm.addEventListener("submit", async (e) => {
 async function init() {
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await getSupabase().auth.getSession();
 
   if (!session) {
     window.location.href = "login.html";

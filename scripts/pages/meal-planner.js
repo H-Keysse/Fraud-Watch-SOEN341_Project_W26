@@ -1,3 +1,5 @@
+import { getSupabase } from "../supabaseClient.js";
+
 import {
   escapeHtml,
   getMonday,
@@ -5,8 +7,6 @@ import {
   formatWeekRange,
   slotKey,
 } from "../logic/sharedLogic.js";
-
-const supabase = window.supabase;
 
 let currentUser = null;
 let currentWeekStart = getMonday(new Date());
@@ -46,7 +46,7 @@ function showMessage(text, isError = false) {
 
 
 async function getOrCreateMealPlan(weekStartDate) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("meal_plans")
     .upsert(
       {
@@ -67,7 +67,7 @@ async function getOrCreateMealPlan(weekStartDate) {
 async function fetchWeeklyPlan(weekStartDate) {
   const mealPlan = await getOrCreateMealPlan(weekStartDate);
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("meal_plan_items")
     .select("id, day_of_week, meal_type, recipe_id, recipes(id, name)")
     .eq("meal_plan_id", mealPlan.id);
@@ -82,7 +82,7 @@ async function fetchWeeklyPlan(weekStartDate) {
 async function upsertMealSlot({ weekStartDate, dayOfWeek, mealType, recipeId }) {
   const mealPlan = await getOrCreateMealPlan(weekStartDate);
 
-  const { error } = await supabase.from("meal_plan_items").upsert(
+  const { error } = await getSupabase().from("meal_plan_items").upsert(
     {
       meal_plan_id: mealPlan.id,
       day_of_week: dayOfWeek,
@@ -98,7 +98,7 @@ async function upsertMealSlot({ weekStartDate, dayOfWeek, mealType, recipeId }) 
 }
 
 async function removeMealSlot({ weekStartDate, dayOfWeek, mealType }) {
-  const { data: mealPlan, error: mealPlanError } = await supabase
+  const { data: mealPlan, error: mealPlanError } = await getSupabase()
     .from("meal_plans")
     .select("id")
     .eq("user_id", currentUser.id)
@@ -112,7 +112,7 @@ async function removeMealSlot({ weekStartDate, dayOfWeek, mealType }) {
     return;
   }
 
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from("meal_plan_items")
     .delete()
     .eq("meal_plan_id", mealPlan.id)
@@ -125,7 +125,7 @@ async function removeMealSlot({ weekStartDate, dayOfWeek, mealType }) {
 }
 
 async function loadRecipes() {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("recipes")
     .select("id, name")
     .order("name", { ascending: true });
@@ -208,7 +208,7 @@ function closeAssignModal() {
 async function init() {
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await getSupabase().auth.getSession();
 
   if (!session) {
     window.location.href = "login.html";
