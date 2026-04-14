@@ -1,6 +1,4 @@
-import { getSupabase } from "../supabaseClient.js";
-
-
+import * as authService from "../services/authService.js";
 
 let currentUser = null;
 const messageBanner = document.getElementById("message-banner");
@@ -30,7 +28,7 @@ document.getElementById("ai-recipe-btn").addEventListener("click", () => {
 async function checkSession() {
   const {
     data: { session },
-  } = await getSupabase().auth.getSession();
+  } = await authService.getSession();
 
   if (!session) {
     window.location.href = "login.html";
@@ -48,7 +46,8 @@ async function checkSession() {
 async function loadUserPreferences() {
   if (!currentUser) return;
 
-  const { data, error } = await getSupabase()
+  const { getSupabase } = await import("../supabaseClient.js");
+  const { data } = await getSupabase()
     .from("users")
     .select("dietary_preferences, allergies")
     .eq("id", currentUser.id)
@@ -83,6 +82,7 @@ document
       document.querySelectorAll('input[name="profile_allergies"]:checked'),
     ).map((cb) => cb.value);
 
+    const { getSupabase } = await import("../supabaseClient.js");
     const { error } = await getSupabase().from("users").upsert({
       id: currentUser.id,
       dietary_preferences: selectedDiet,
@@ -97,7 +97,7 @@ document
   });
 
 document.getElementById("logout-btn").addEventListener("click", async () => {
-  const { error } = await getSupabase().auth.signOut();
+  const { error } = await authService.signOut();
   if (!error) {
     window.location.href = "login.html";
   } else {

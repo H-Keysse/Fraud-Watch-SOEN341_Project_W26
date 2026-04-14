@@ -1,3 +1,4 @@
+import * as authService from "../services/authService.js";
 import { getSupabase } from "../supabaseClient.js";
 
 import {

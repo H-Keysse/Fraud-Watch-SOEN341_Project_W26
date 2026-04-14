@@ -6,195 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Material Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <style>
-        *,
-        *:after,
-        *::before {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            outline: none;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-                url('https://images.pexels.com/photos/4958522/pexels-photo-4958522.jpeg');
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .materialContainer {
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .box {
-            position: relative;
-            background: #fff;
-            padding: 60px 50px 40px;
-            border-radius: 10px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            z-index: 5;
-            transition: 400ms cubic-bezier(.4, 0, .2, 1);
-        }
-
-        .box::before {
-            content: "";
-            width: 100%;
-            height: 30px;
-            border-radius: 10px;
-            position: absolute;
-            top: -10px;
-            left: 0;
-            background: rgba(255, 255, 255, .6);
-            transform: scale(.95);
-            z-index: -1;
-        }
-
-        .title {
-            width: 100%;
-            line-height: 46px;
-            font-size: 34px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #ED2553;
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .title:before {
-            content: "";
-            width: 5px;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: -50px;
-            background: #ED2553;
-        }
-
-        .name-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .input {
-            position: relative;
-            margin-top: 30px;
-            height: 65px;
-            width: 100%;
-        }
-
-        .input input {
-            width: 100%;
-            height: 50px;
-            top: 10px;
-            border: none;
-            background: transparent;
-            font-size: 20px;
-            font-weight: 300;
-            position: relative;
-            z-index: 5;
-        }
-
-        .input label {
-            position: absolute;
-            top: 10px;
-            left: 0;
-            line-height: 50px;
-            font-size: 20px;
-            color: rgba(0, 0, 0, 0.3);
-            transition: 300ms ease;
-            pointer-events: none;
-        }
-
-        .input input:focus+label,
-        .input input:not(:placeholder-shown)+label {
-            top: -20px;
-            font-size: 14px;
-            color: #ED2553;
-        }
-
-        .input:before {
-            content: "";
-            width: 100%;
-            height: 1px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .input .spin {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ED2553;
-            z-index: 4;
-            transition: 400ms ease;
-        }
-
-        .input input:focus~.spin {
-            width: 100%;
-        }
-
-        .button.register {
-            width: 100%;
-            margin-top: 40px;
-            height: 60px;
-            position: relative;
-        }
-
-        .button.register button {
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            background: #fff;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            color: rgba(0, 0, 0, 0.2);
-            font-size: 18px;
-            font-weight: 900;
-            transition: 300ms;
-        }
-
-        .button.register button:hover {
-            color: #ED2553;
-            border-color: #ED2553;
-        }
-
-        .footer-links {
-            text-align: center;
-            margin-top: 25px;
-            color: rgba(0, 0, 0, 0.4);
-            font-size: 16px;
-        }
-
-        .footer-links a {
-            color: #ED2553;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .terms {
-            font-size: 11px;
-            color: #bbb;
-            margin-top: 20px;
-            line-height: 1.6;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/register.css">
 </head>
 
 <body>
@@ -227,8 +39,7 @@
                     <input type="password" id="pwd" placeholder=" " required>
                     <label for="pwd">Password</label>
                     <span class="spin"></span>
-                    <p style="font-size: 10px; color: #aaa; position: absolute; bottom: -22px;">8+ chars, mix of letters
-                        & numbers</p>
+                    <p class="password-hint">8+ chars, mix of letters & numbers</p>
                 </div>
 
                 <div class="button register">
@@ -244,65 +55,14 @@
 
             <div class="terms">
                 By continuing, you confirm you are 18 or over and agree to our
-                <a href="#" style="color:#999">Privacy Policy</a> and <a href="#" style="color:#999">Terms of Use</a>.
+                <a href="#" class="muted">Privacy Policy</a> and <a href="#" class="muted">Terms of Use</a>.
             </div>
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="scripts/supabase-init.js"></script>
-    <script>
-        document.querySelector('form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('pwd').value;
-            const firstName = document.getElementById('fname').value;
-            const lastName = document.getElementById('lname').value;
-            const btn = document.querySelector('.button.register button');
-            const originalText = btn.innerHTML;
-
-            if (!email || !password || !firstName || !lastName) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters');
-                return;
-            }
-
-            btn.innerHTML = '<span>Registering...</span>';
-            btn.disabled = true;
-
-            try {
-                const { data, error } = await window.__MEAL_MAJOR_SUPABASE__.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            first_name: firstName,
-                            last_name: lastName,
-                        }
-                    }
-                });
-
-                if (error) throw error;
-
-                if (data.session) {
-                    // User is logged in
-                    alert('Registration successful! Redirecting...');
-                    window.location.href = 'home.html';
-                }
-            } catch (error) {
-                console.error('Error registering:', error.message);
-                alert('Error registering: ' + error.message);
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        });
-    </script>
+    <script type="module" src="scripts/pages/register.js"></script>
 </body>
 
 </html>

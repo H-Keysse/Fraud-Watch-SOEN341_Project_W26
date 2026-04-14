@@ -1,0 +1,197 @@
+*,
+*:after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("../images/food-background.svg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.materialContainer {
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+
+.box {
+  position: relative;
+  background: #fff;
+  padding: 60px 50px 40px;
+  border-radius: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+  transition: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.box::before {
+  content: "";
+  width: 100%;
+  height: 30px;
+  border-radius: 10px;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0.95);
+  z-index: -1;
+}
+
+.title {
+  width: 100%;
+  line-height: 46px;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ed2553;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.title:before {
+  content: "";
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -50px;
+  background: #ed2553;
+}
+
+.name-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.input {
+  position: relative;
+  margin-top: 30px;
+  height: 65px;
+  width: 100%;
+}
+
+.input input {
+  width: 100%;
+  height: 50px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 300;
+  position: relative;
+  z-index: 5;
+}
+
+.input label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  line-height: 50px;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3);
+  transition: 300ms ease;
+  pointer-events: none;
+}
+
+.input input:focus + label,
+.input input:not(:placeholder-shown) + label {
+  top: -20px;
+  font-size: 14px;
+  color: #ed2553;
+}
+
+.input:before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.input .spin {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ed2553;
+  z-index: 4;
+  transition: 400ms ease;
+}
+
+.input input:focus ~ .spin {
+  width: 100%;
+}
+
+.button.register {
+  width: 100%;
+  margin-top: 40px;
+  height: 60px;
+  position: relative;
+}
+
+.button.register button {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 18px;
+  font-weight: 900;
+  transition: 300ms;
+}
+
+.button.register button:hover {
+  color: #ed2553;
+  border-color: #ed2553;
+}
+
+.footer-links {
+  text-align: center;
+  margin-top: 25px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 16px;
+}
+
+.footer-links a {
+  color: #ed2553;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.terms {
+  font-size: 11px;
+  color: #bbb;
+  margin-top: 20px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.password-hint {
+  font-size: 10px;
+  color: #aaa;
+  position: absolute;
+  bottom: -22px;
+}
+
+.terms a.muted {
+  color: #999;
+}
