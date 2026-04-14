@@ -1,21 +1,21 @@
 import * as authService from "../services/authService.js";
-import { getSupabase } from "../supabaseClient.js";
-
+import * as mealPlannerService from "../services/mealPlannerService.js";
+import { escapeHtml } from "../logic/sharedLogic.js";
 import {
-  escapeHtml,
-  getMonday,
+  DAY_LABELS,
+  MEAL_TYPES,
+  buildPlannerRowHtml,
+  buildWeeklySlotMap,
   formatDateISO,
   formatWeekRange,
+  getMonday,
+  isRecipeAssignedToAnotherSlotOnSameDay,
   slotKey,
-} from "../logic/sharedLogic.js";
+} from "../logic/mealPlannerLogic.js";
 
 let currentUser = null;
 let currentWeekStart = getMonday(new Date());
-let recipes = [];
 let weeklySlots = {};
-
-const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const mealTypes = ["breakfast", "lunch", "dinner", "snack"];
 
 const messageBanner = document.getElementById("message-banner");
 const weekLabel = document.getElementById("week-label");
@@ -36,143 +36,32 @@ function showMessage(text, isError = false) {
   }, 3000);
 }
 
-
-
-
-
-
-
-
-
-
-
-async function getOrCreateMealPlan(weekStartDate) {
-  const { data, error } = await getSupabase()
-    .from("meal_plans")
-    .upsert(
-      {
-        user_id: currentUser.id,
-        week_start_date: weekStartDate,
-      },
-      { onConflict: "user_id,week_start_date" },
-    )
-    .select("id, week_start_date")
-    .single();
-
-  if (error) {
-    throw error;
-  }
-  return data;
-}
-
-async function fetchWeeklyPlan(weekStartDate) {
-  const mealPlan = await getOrCreateMealPlan(weekStartDate);
-
-  const { data, error } = await getSupabase()
-    .from("meal_plan_items")
-    .select("id, day_of_week, meal_type, recipe_id, recipes(id, name)")
-    .eq("meal_plan_id", mealPlan.id);
+async function loadRecipesIntoSelect() {
+  const { data, error } =
+    await mealPlannerService.fetchRecipeOptionsForSelect(currentUser.id);
 
   if (error) {
     throw error;
   }
 
-  return { mealPlan, items: data || [] };
-}
-
-async function upsertMealSlot({ weekStartDate, dayOfWeek, mealType, recipeId }) {
-  const mealPlan = await getOrCreateMealPlan(weekStartDate);
-
-  const { error } = await getSupabase().from("meal_plan_items").upsert(
-    {
-      meal_plan_id: mealPlan.id,
-      day_of_week: dayOfWeek,
-      meal_type: mealType,
-      recipe_id: Number(recipeId),
-    },
-    { onConflict: "meal_plan_id,day_of_week,meal_type" },
-  );
-
-  if (error) {
-    throw error;
-  }
-}
-
-async function removeMealSlot({ weekStartDate, dayOfWeek, mealType }) {
-  const { data: mealPlan, error: mealPlanError } = await getSupabase()
-    .from("meal_plans")
-    .select("id")
-    .eq("user_id", currentUser.id)
-    .eq("week_start_date", weekStartDate)
-    .maybeSingle();
-
-  if (mealPlanError) {
-    throw mealPlanError;
-  }
-  if (!mealPlan) {
-    return;
-  }
-
-  const { error } = await getSupabase()
-    .from("meal_plan_items")
-    .delete()
-    .eq("meal_plan_id", mealPlan.id)
-    .eq("day_of_week", dayOfWeek)
-    .eq("meal_type", mealType);
-
-  if (error) {
-    throw error;
-  }
-}
-
-async function loadRecipes() {
-  const { data, error } = await getSupabase()
-    .from("recipes")
-    .select("id, name")
-    .order("name", { ascending: true });
-
-  if (error) {
-    throw error;
-  }
-
-  recipes = data || [];
+  const recipes = data || [];
   const options = recipes
-    .map((recipe) => `<option value="${recipe.id}">${escapeHtml(recipe.name)}</option>`)
+    .map(
+      (recipe) =>
+        `<option value="${recipe.id}">${escapeHtml(recipe.name)}</option>`,
+    )
     .join("");
 
-  assignRecipeSelect.innerHTML = `<option value="">Select a recipe</option>${options}`;
+  assignRecipeSelect.innerHTML =
+    `<option value="">Select a recipe</option>${options}`;
 }
 
 function renderGrid() {
   plannerGridBody.innerHTML = "";
 
-  mealTypes.forEach((mealType) => {
+  MEAL_TYPES.forEach((mealType) => {
     const row = document.createElement("tr");
-    row.innerHTML = `<th class="meal-type-cell">${mealType}</th>`;
-
-    for (let day = 1; day <= 7; day += 1) {
-      const slot = weeklySlots[slotKey(day, mealType)];
-      const recipeName = slot && slot.recipes ? escapeHtml(slot.recipes.name) : "";
-
-      row.innerHTML += `
-        <td>
-          <div class="slot-card">
-            <div class="slot-recipe">${recipeName || "<span class='empty-slot'>No meal assigned</span>"}</div>
-            <div class="slot-actions">
-              <button class="btn btn-primary assign-btn" data-day="${day}" data-meal-type="${mealType}">
-                ${slot ? "Edit" : "Assign"}
-              </button>
-              ${
-                slot
-                  ? `<button class="btn btn-danger remove-btn" data-day="${day}" data-meal-type="${mealType}">Remove</button>`
-                  : ""
-              }
-            </div>
-          </div>
-        </td>
-      `;
-    }
-
+    row.innerHTML = buildPlannerRowHtml(mealType, weeklySlots, escapeHtml);
     plannerGridBody.appendChild(row);
   });
 }
@@ -181,12 +70,11 @@ async function refreshWeekData() {
   const weekStartDate = formatDateISO(currentWeekStart);
   weekLabel.textContent = formatWeekRange(currentWeekStart);
 
-  const { items } = await fetchWeeklyPlan(weekStartDate);
-  weeklySlots = {};
-
-  items.forEach((item) => {
-    weeklySlots[slotKey(item.day_of_week, item.meal_type)] = item;
-  });
+  const { items } = await mealPlannerService.fetchWeeklyPlan(
+    currentUser.id,
+    weekStartDate,
+  );
+  weeklySlots = buildWeeklySlotMap(items);
 
   renderGrid();
 }
@@ -198,7 +86,7 @@ function openAssignModal(dayOfWeek, mealType) {
   const existing = weeklySlots[slotKey(dayOfWeek, mealType)];
   assignRecipeSelect.value = existing ? existing.recipe_id : "";
 
-  assignContext.textContent = `${dayLabels[dayOfWeek - 1]} - ${mealType}`;
+  assignContext.textContent = `${DAY_LABELS[dayOfWeek - 1]} - ${mealType}`;
   assignModal.classList.add("active");
 }
 
@@ -209,7 +97,7 @@ function closeAssignModal() {
 async function init() {
   const {
     data: { session },
-  } = await getSupabase().auth.getSession();
+  } = await authService.getSession();
 
   if (!session) {
     window.location.href = "login.html";
@@ -219,7 +107,7 @@ async function init() {
   currentUser = session.user;
 
   try {
-    await loadRecipes();
+    await loadRecipesIntoSelect();
     await refreshWeekData();
   } catch (error) {
     showMessage(`Failed to load planner: ${error.message}`, true);
@@ -252,8 +140,12 @@ document.getElementById("recipes-btn").addEventListener("click", () => {
   window.location.href = "recipes.html";
 });
 
-document.getElementById("close-assign-modal").addEventListener("click", closeAssignModal);
-document.getElementById("cancel-assign-btn").addEventListener("click", closeAssignModal);
+document
+  .getElementById("close-assign-modal")
+  .addEventListener("click", closeAssignModal);
+document
+  .getElementById("cancel-assign-btn")
+  .addEventListener("click", closeAssignModal);
 
 assignForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -264,11 +156,30 @@ assignForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  const dayOfWeek = Number(assignDayInput.value);
+  const mealType = assignMealTypeInput.value;
+
+  if (
+    isRecipeAssignedToAnotherSlotOnSameDay({
+      weeklySlots,
+      dayOfWeek,
+      mealTypeForSlot: mealType,
+      recipeId,
+    })
+  ) {
+    showMessage(
+      "That recipe is already assigned to another meal on this day. Pick a different recipe or clear the other slot first.",
+      true,
+    );
+    return;
+  }
+
   try {
-    await upsertMealSlot({
+    await mealPlannerService.upsertMealSlot({
+      userId: currentUser.id,
       weekStartDate: formatDateISO(currentWeekStart),
-      dayOfWeek: Number(assignDayInput.value),
-      mealType: assignMealTypeInput.value,
+      dayOfWeek,
+      mealType,
       recipeId,
     });
     closeAssignModal();
@@ -290,7 +201,8 @@ plannerGridBody.addEventListener("click", async (event) => {
   if (!removeBtn) return;
 
   try {
-    await removeMealSlot({
+    await mealPlannerService.removeMealSlot({
+      userId: currentUser.id,
       weekStartDate: formatDateISO(currentWeekStart),
       dayOfWeek: Number(removeBtn.dataset.day),
       mealType: removeBtn.dataset.mealType,
