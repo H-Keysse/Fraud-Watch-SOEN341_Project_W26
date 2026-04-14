@@ -1,5 +1,5 @@
 import {
-  AI_SYSTEM_PROMPT,
+  aiSystemPrompt,
   parseJsonFromAssistantContent,
 } from "../logic/aiRecipeLogic.js";
 
@@ -20,7 +20,7 @@ export async function fetchRecipeIdeasFromOpenAI({
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: AI_SYSTEM_PROMPT },
+        { role: "system", content: aiSystemPrompt },
         { role: "user", content: userPrompt },
       ],
       response_format: { type: "json_object" },

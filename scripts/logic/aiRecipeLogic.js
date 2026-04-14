@@ -1,6 +1,6 @@
 
 
-export const AI_SYSTEM_PROMPT = `You are a helpful cooking assistant. The user will list ingredients they have.
+export const aiSystemPrompt = `You are a helpful cooking assistant. The user will list ingredients they have.
 Respond with a single JSON object only (no markdown fences) with this exact shape:
 {"recipes":[{"title":"string","ingredients_used":["string"],"steps":"string"}]}
 Rules:
