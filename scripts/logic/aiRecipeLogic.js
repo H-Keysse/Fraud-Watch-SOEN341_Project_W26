@@ -1,4 +1,4 @@
-
+//Guide prompt for AI response
 
 export const aiSystemPrompt = `You are a helpful cooking assistant. The user will list ingredients they have.
 Respond with a single JSON object only (no markdown fences) with this exact shape:
@@ -9,6 +9,8 @@ Rules:
 - "steps" should be brief numbered or short paragraph instructions.
 - If no good recipes fit, return {"recipes":[]}.`;
 
+//Formats ingredient inputs into list
+
 export function buildUserPrompt(ingredientsRaw) {
   const lines = ingredientsRaw
     .split(/[\n,]+/)
@@ -18,8 +20,10 @@ export function buildUserPrompt(ingredientsRaw) {
     ? lines.map((x) => `- ${x}`).join("\n")
     : ingredientsRaw.trim();
 
+  //Final prompt fed to OpenAI
   return `Here are the ingredients I have available:\n${listText}\n\nSuggest between 0 and 3 realistic recipes I can make using primarily these ingredients. You may assume basic pantry items only if essential (salt, pepper, oil, water) and say so in the steps if used. If nothing sensible can be made, return an empty recipes array.`;
 }
+
 
 export function parseJsonFromAssistantContent(content) {
   let trimmed = (content || "").trim();
