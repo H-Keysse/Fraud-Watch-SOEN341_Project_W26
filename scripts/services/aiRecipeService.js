@@ -1,3 +1,7 @@
+/**
+OpenAI API integration, request recipe ideas & retrieve api key
+**/
+
 import {
   aiSystemPrompt,
   parseJsonFromAssistantContent,
