@@ -1,4 +1,4 @@
-
+// Body for creating user profile, preferences & allergies
 
 export function buildProfileUpsertPayload(userId, dietaryPreferences, allergies) {
   return {
