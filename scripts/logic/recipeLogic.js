@@ -1,4 +1,17 @@
-
+/**
+ * recipeLogic.js contains the core frontend logic related to recipe handling.
+ *
+ * What this file does:
+ * - Validates recipe form input before submission
+ * - Builds recipe payloads from form values
+ * - Sanitizes recipe search terms before creating filter queries
+ * - Formats recipe values such as cost and time for display
+ * - Generates recipe card HTML used by the recipes page
+ *
+ *
+ * Used by:
+ * - recipes.js and recipeLogic.test.js
+ */
 
 import { escapeHtml } from "./sharedLogic.js";
 
@@ -40,9 +53,9 @@ export function buildRecipeFormPayload({
   };
 }
 
-export function formatRecipeCostDisplay(cost) {
+export function formatRecipeCostDisplay(cost) { 
   const n = parseFloat(cost);
-  if (Number.isNaN(n)) return "0.00";
+  if (Number.isNaN(n)) return "0.00"; // here lies the check we have made to fix the second Bug in our Bug report for our Peer reviewed Code
   return n.toFixed(2);
 }
 
