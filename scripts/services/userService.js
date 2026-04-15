@@ -1,3 +1,5 @@
+// User DB queries: fetch and update preferences & allergies
+
 import { getSupabase } from "../supabaseClient.js";
 
 export async function fetchUserPreferences(userId) {
