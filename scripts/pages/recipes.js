@@ -1,4 +1,25 @@
-import * as authService from "../services/authService.js";
+/**
+ * recipes.js acts as the page controller for the Recipe Management page.
+ *
+ * What this file does:
+ * - Checks whether the user is authenticated before loading recipes
+ * - Loads the current user's recipes from the backend
+ * - Applies search and max-cost filters
+ * - Renders recipe cards in the UI
+ * - Handles creating, editing, and deleting recipes
+ * - Opens and closes the recipe and delete confirmation modals
+ * - Connects page events to the service and logic layers
+ *
+ * Architecture role:
+ * - Uses authService for session validation
+ * - Uses recipeService for database operations
+ * - Uses recipeLogic helpers for building filters, payloads, and UI HTML
+ *
+ */
+
+
+import * as authService from "../services/authService.js"; // Imports authentication and recipe-related service functions, along with reusable recipe logic helpers used for filtering, payload building and recipe card rendering on this page.
+
 import * as recipeService from "../services/recipeService.js";
 import {
   buildRecipeCardHtml,
@@ -30,7 +51,7 @@ const stepsInput = document.getElementById("recipe-steps");
 const costInput = document.getElementById("recipe-cost");
 const timeInput = document.getElementById("recipe-time");
 
-function showMessage(text, isError = false) {
+function showMessage(text, isError = false) { // Displays a temporary success or error message banner to the user
   messageBanner.textContent = text;
   messageBanner.className = isError ? "error-msg" : "success-msg";
   messageBanner.style.display = "block";
@@ -40,7 +61,7 @@ function showMessage(text, isError = false) {
   }, 3000);
 }
 
-async function init() {
+async function init() { // Initializes the page by checking for an authenticated session and then loading the user's recipes
   const {
     data: { session },
   } = await authService.getSession();
@@ -51,7 +72,7 @@ async function init() {
   }
 
   currentUser = session.user;
-  await loadRecipes();
+  await loadRecipes(); // Loads the current user's recipes using the active search and cost filter values
 }
 
 async function loadRecipes() {
@@ -70,7 +91,7 @@ async function loadRecipes() {
     return;
   }
 
-  renderRecipes(data);
+  renderRecipes(data); // Renders the recipe cards in the page and attaches edit/delete button  listeners
 }
 
 function renderRecipes(recipes) {
@@ -97,54 +118,54 @@ function renderRecipes(recipes) {
   });
 }
 
-document.getElementById("add-recipe-btn").addEventListener("click", () => {
+document.getElementById("add-recipe-btn").addEventListener("click", () => { // Opens the recipe modal in create mode with a cleared form
   recipeForm.reset();
   recipeIdInput.value = "";
   modalTitle.textContent = "Create Recipe";
   recipeModal.classList.add("active");
 });
 
-document.getElementById("close-modal").addEventListener("click", () => {
+document.getElementById("close-modal").addEventListener("click", () => { // Closes the recipe modal when the user clicks the close icon
   recipeModal.classList.remove("active");
 });
 
-document.getElementById("cancel-btn").addEventListener("click", () => {
+document.getElementById("cancel-btn").addEventListener("click", () => { // Closes the recipe modal without saving changes
   recipeModal.classList.remove("active");
 });
 
-document.getElementById("home-btn").addEventListener("click", () => {
+document.getElementById("home-btn").addEventListener("click", () => { // Navigates back to the home page
   window.location.href = "home.html";
 });
 
 let debounceTimer;
 
-function triggerSearch() {
+function triggerSearch() { // Debounces search/filter updates so recipes are not reloaded on every single keystroke immediately
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
     loadRecipes();
   }, 300);
 }
 
-filterCostRange.addEventListener("input", (e) => {
+filterCostRange.addEventListener("input", (e) => { // Syncs the numeric cost filter with the range input and reloads recipes with debounce
   filterCostNumber.value = e.target.value;
   triggerSearch();
 });
 
-filterCostNumber.addEventListener("input", (e) => {
+filterCostNumber.addEventListener("input", (e) => {  // Syncs the range input with the numeric cost filter and reloads recipes with debounce
   filterCostRange.value = e.target.value;
   triggerSearch();
 });
 
-searchInput.addEventListener("input", triggerSearch);
-
-clearFiltersBtn.addEventListener("click", () => {
+searchInput.addEventListener("input", triggerSearch); // Reloads recipes when the user types in the search bar, using debounce
+ 
+clearFiltersBtn.addEventListener("click", () => { // Resets the search and cost filters to default values and reloads all recipes
   searchInput.value = "";
   filterCostRange.value = "100";
   filterCostNumber.value = "100";
   loadRecipes();
 });
 
-async function openEditModal(id) {
+async function openEditModal(id) { // Loads a recipe by id and fills the edit form before opening the recipe modal
   const { data, error } = await recipeService.fetchRecipeById(
     id,
     currentUser.id,
@@ -176,7 +197,7 @@ async function openEditModal(id) {
   recipeModal.classList.add("active");
 }
 
-recipeForm.addEventListener("submit", async (e) => {
+recipeForm.addEventListener("submit", async (e) => { // Handles both recipe creation and recipe updates depending on whether a recipe id is present
   e.preventDefault();
 
   const selectedAllergens = Array.from(
@@ -226,12 +247,12 @@ recipeForm.addEventListener("submit", async (e) => {
   }
 });
 
-function openDeleteModal(id) {
+function openDeleteModal(id) { // Stores the selected recipe id and opens the delete confirmation modal
   recipeToDelete = id;
   deleteModal.classList.add("active");
 }
 
-document.getElementById("cancel-delete-btn").addEventListener("click", () => {
+document.getElementById("cancel-delete-btn").addEventListener("click", () => { // Closes the delete confirmation modal without deleting the selected recipe
   deleteModal.classList.remove("active");
   recipeToDelete = null;
 });
@@ -257,7 +278,7 @@ document
     recipeToDelete = null;
   });
 
-window.addEventListener("click", (e) => {
+window.addEventListener("click", (e) => { // Closes open modals when the user clicks outside of the modal content
   if (e.target === recipeModal) {
     recipeModal.classList.remove("active");
   }
