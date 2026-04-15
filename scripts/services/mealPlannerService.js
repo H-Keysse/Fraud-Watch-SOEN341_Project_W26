@@ -1,3 +1,8 @@
+/**
+Meal planner: creation, deletion & editing of the weekly slots
+**/
+
+
 import { getSupabase } from "../supabaseClient.js";
 
 export async function getOrCreateMealPlan(userId, weekStartDate) {
