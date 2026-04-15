@@ -1,3 +1,6 @@
+//Escape function for special HTML characters to prevent injections
+
+
 export function escapeHtml(unsafe) {
   return (unsafe || "")
     .toString()
