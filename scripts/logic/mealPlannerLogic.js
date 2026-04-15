@@ -37,8 +37,8 @@ export function buildWeeklySlotMap(items) {
   return weeklySlots;
 }
 
-// Checks for duplicate recipe in the same week
-export function isRecipeAssignedToAnotherSlotOnSameDay({
+// Checks for duplicate recipe in the same week THIS IS THE CODE USED FOR BUG FIX #/
+export function isRecipeAssignedToAnotherSlotOnSameDay({ 
   weeklySlots,
   dayOfWeek,
   mealTypeForSlot,
