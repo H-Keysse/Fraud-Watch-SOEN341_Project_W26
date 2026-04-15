@@ -1,4 +1,3 @@
-
 //Labels for days & meal types
 export const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 export const mealTypes = ["breakfast", "lunch", "dinner", "snack"];
@@ -46,15 +45,17 @@ export function isRecipeAssignedToAnotherSlotOnSameDay({
   recipeId,
 }) {
   const id = String(recipeId);
-  for (const mealType of mealTypes) {
-    if (mealType === mealTypeForSlot) continue;
-    const slot = weeklySlots[slotKey(dayOfWeek, mealType)];
-    if (
-      slot != null &&
-      slot.recipe_id != null &&
-      String(slot.recipe_id) === id
-    ) {
-      return true;
+  for (let day = 1; day <= 7; day += 1) {
+    for (const mealType of mealTypes) {
+      if (day === dayOfWeek && mealType === mealTypeForSlot) continue;
+      const slot = weeklySlots[slotKey(day, mealType)];
+      if (
+        slot != null &&
+        slot.recipe_id != null &&
+        String(slot.recipe_id) === id
+      ) {
+        return true;
+      }
     }
   }
   return false;

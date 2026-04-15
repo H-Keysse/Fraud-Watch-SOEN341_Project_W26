@@ -1,8 +1,8 @@
 /*
-  These tests verify the meal planner's same day recipe assignment logic.
-  They check three main cases. 
-  1. When there is no conflict. 
-  2. When the same recipe is assigned to another meal slot on the same day 
+  These tests verify the meal planner's week-level recipe assignment logic.
+  They check three main cases.
+  1. When there is no conflict.
+  2. When the same recipe is assigned to another meal slot in the same week 
   3. When the current slot being edited should not count as a duplicate.
 */
 
@@ -12,7 +12,6 @@ import {
   buildWeeklySlotMap,
   isRecipeAssignedToAnotherSlotOnSameDay,
 } from "../scripts/logic/mealPlannerLogic.js";
-
 
 test("isRecipeAssignedToAnotherSlotOnSameDay is false when no conflict", () => {
   const weeklySlots = buildWeeklySlotMap([
@@ -34,7 +33,7 @@ test("isRecipeAssignedToAnotherSlotOnSameDay is false when no conflict", () => {
   );
 });
 
-test("isRecipeAssignedToAnotherSlotOnSameDay detects same recipe on another slot", () => {
+test("isRecipeAssignedToAnotherSlotOnSameDay detects same recipe on another day of the same week", () => {
   const weeklySlots = buildWeeklySlotMap([
     {
       day_of_week: 1,
@@ -46,14 +45,14 @@ test("isRecipeAssignedToAnotherSlotOnSameDay detects same recipe on another slot
   assert.equal(
     isRecipeAssignedToAnotherSlotOnSameDay({
       weeklySlots,
-      dayOfWeek: 1,
+
+      dayOfWeek: 3,
       mealTypeForSlot: "lunch",
       recipeId: 9,
     }),
     true,
   );
 });
-
 test("isRecipeAssignedToAnotherSlotOnSameDay ignores the slot being edited", () => {
   const weeklySlots = buildWeeklySlotMap([
     {

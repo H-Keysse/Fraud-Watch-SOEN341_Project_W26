@@ -37,8 +37,9 @@ function showMessage(text, isError = false) {
 }
 
 async function loadRecipesIntoSelect() {
-  const { data, error } =
-    await mealPlannerService.fetchRecipeOptionsForSelect(currentUser.id);
+  const { data, error } = await mealPlannerService.fetchRecipeOptionsForSelect(
+    currentUser.id,
+  );
 
   if (error) {
     throw error;
@@ -52,8 +53,7 @@ async function loadRecipesIntoSelect() {
     )
     .join("");
 
-  assignRecipeSelect.innerHTML =
-    `<option value="">Select a recipe</option>${options}`;
+  assignRecipeSelect.innerHTML = `<option value="">Select a recipe</option>${options}`;
 }
 
 function renderGrid() {
@@ -168,7 +168,7 @@ assignForm.addEventListener("submit", async (event) => {
     })
   ) {
     showMessage(
-      "That recipe is already assigned to another meal on this day. Pick a different recipe or clear the other slot first.",
+      "That recipe is already assigned to another meal this week. Pick a different recipe or clear the other slot first.",
       true,
     );
     return;
