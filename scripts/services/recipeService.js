@@ -1,3 +1,8 @@
+/**
+Recipe supabase queries: create, edit, delete recipes
+**/
+
+
 import { getSupabase } from "../supabaseClient.js";
 
 
