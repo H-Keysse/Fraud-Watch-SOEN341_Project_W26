@@ -16,7 +16,7 @@
 import { escapeHtml } from "./sharedLogic.js";
 
 
-export function sanitizeIlikeSearchTerm(raw) {
+export function sanitizeIlikeSearchTerm(raw) { // Bug fix: Cleans user search input before building filters to avoid wildcard characters
   return (raw || "").trim().replace(/%/g, "").replace(/_/g, "");
 }
 
